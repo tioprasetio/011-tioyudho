@@ -131,5 +131,3 @@ class AccountController extends Controller
         return redirect()->route('account.login');
     }
 }
-
-// VID 7
