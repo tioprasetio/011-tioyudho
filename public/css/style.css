@@ -12,16 +12,25 @@
     --star-raing-color: #3a92f7;
 }
 
+a {
+    cursor: pointer;
+}
+
 body{
     font-family: var(--body-font-family);
 }
 
 .header{
     background-color: var(--btn-bg-primary);
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 99;
+    top: 0;
 }
 
 .star-rating {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     font-size: 1em;
     justify-content: flex-start

@@ -7,18 +7,23 @@
         <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('image/borie.svg') }}">
     </head>
     <body class="bg-light">
-        <div class="container-fluid shadow-lg header">
+        <div class="container-fluid shadow-lg header py-2">
             <div class="container">
                 <div class="d-flex justify-content-between">
-                    <h1 class="text-center"><a href="{{ route('home') }}" class="h3 text-white text-decoration-none">Book Review App</a></h1>
+                    <h1 class="text-center">
+                        <a href="{{ route('home') }}" class="h4 text-white text-decoration-none">
+                            <img src="{{ asset('image/borie.svg') }}" alt="Bootstrap" width="37" height="31"><strong> BoRie.</strong>
+                        </a>
+                    </h1>
                     <div class="d-flex align-items-center navigation">
                         @if (Auth::check())
-                            <a href="{{ route ('account.profile') }}" class="text-white">My Account</a>
+                            <button class="btn btn-sm btn-light"><a href="{{ route ('account.profile') }}" class="text-primary">My Account</a></button>
                         @else
-                            <a href="{{ route ('account.login') }}" class="text-white">Login</a>
-                            <a href="{{ route ('account.register') }}" class="text-white ps-2">Register</a>
+                            <button class="btn btn-sm btn-light"><a href="{{ route ('account.login') }}" class="text-primary">Login</a></button>
                         @endif
                         
                     </div>

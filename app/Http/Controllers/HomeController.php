@@ -18,7 +18,10 @@ class HomeController extends Controller
             $books->where('title', 'like', '%'.$request->keyword.'%');
         }
 
-        $books = $books->where('status',1)->paginate(8);
+        $books = $books->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->where('status', 1)
+            ->paginate(8);
 
         return view('home', [
             'books'=>$books
@@ -26,22 +29,38 @@ class HomeController extends Controller
     }
 
     // Will show book detail page
-    public function detail($id){
-        $book = Book::with(['reviews.user', 'reviews' => function($query){
-            $query->where('status', 1);
-        }])->findOrFail($id);
+    public function detail($id)
+    {
+        $book = Book::with(['reviews.user', 'reviews' => function ($query) {
+            $query->where('status',
+                1
+            );
+        }])
+        ->where('status', 1)
+        ->findOrFail($id);
 
-        if ($book->status == 0) {
+        if (!$book) {
             abort(404);
         }
 
-        $relatedBooks = Book::where('status', 1)->take(3)->where('id', '!=', $id)->inRandomOrder()->get();
+        $book->loadCount('reviews')->loadAvg('reviews', 'rating');
 
-        return view('book-detail', [
-            'book' => $book,
-            'relatedBooks' => $relatedBooks
-        ]);
+        $relatedBooks = Book::where('status', 1)
+        ->take(3)
+        ->where('id', '!=', $id)
+        ->inRandomOrder()
+        ->get();
+
+        $relatedBooks->loadCount('reviews')->loadAvg('reviews', 'rating');
+
+        return view('book-detail',
+            [
+                'book' => $book,
+                'relatedBooks' => $relatedBooks
+            ]
+        );
     }
+
 
     // Will save review in db
     public function saveReview(Request $request) {
@@ -72,6 +91,7 @@ class HomeController extends Controller
         $review->rating = $request->rating;
         $review->user_id = Auth::user()->id;
         $review->book_id = $request->book_id;
+        $review->status = 1;
         $review->save();
 
         session()->flash('success', 'Review submitted successfully.');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,12 +33,13 @@ class ReviewController extends Controller
     }
 
     // will update a review
-    public function updateReview($id, Request $request) {
+    public function updateReview($id, Request $request)
+    {
+        $user = Auth::user();
 
         $review = Review::findOrFail($id);
-        
-        $validator = Validator::make($request->all(),[
-        
+
+        $validator = Validator::make($request->all(), [
             'review' => 'required',
             'status' => 'required'
         ]);
@@ -51,6 +53,33 @@ class ReviewController extends Controller
         $review->save();
 
         session()->flash('success', 'Review updated successfully.');
-        return redirect()->route('account.reviews');
+
+        if ($user->role == 'user') {
+            return redirect()->route('account.myReviews');
+        } else {
+            return redirect()->route('account.reviews');
+        }
+    }
+
+
+    // Will delete review from db
+    public function deleteReview(Request $request) {
+        $id = $request->id;
+
+        $review = Review::find($id);
+
+        if ($review == null) {
+            session()->flash('error', 'Review not found');
+            return response()->json([
+                'status' => false
+            ]);
+        } else {
+            $review->delete();
+
+            session()->flash('success', 'Review deleted successfully');
+            return response()->json([
+                'status' => false
+            ]);
+        }
     }
 }

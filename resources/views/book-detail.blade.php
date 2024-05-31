@@ -16,12 +16,16 @@
                             <img src="https://placehold.co/990x1400?text=No Image" alt="" class="card-img-top">
                         @endif
                     </div>
+                    @php
+                        $ratingPer = ($book->reviews_avg_rating / 5) * 100;
+                    @endphp
                     <div class="col-md-8">
                         @include('layouts.message')
                         <h3 class="h2 mb-3">{{ $book->title }}</h3>
                         <div class="h4 text-muted">{{ $book->author }}</div>
                         <div class="star-rating d-inline-flex ml-2" title="">
-                            <span class="rating-text theme-font theme-yellow">5.0</span>
+                            <span
+                                class="rating-text theme-font theme-yellow">{{ number_format($book->reviews_avg_rating, 1) }}</span>
                             <div class="star-rating d-inline-flex mx-2" title="">
                                 <div class="back-stars ">
                                     <i class="fa fa-star " aria-hidden="true"></i>
@@ -30,7 +34,7 @@
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
 
-                                    <div class="front-stars" style="width: 100%">
+                                    <div class="front-stars" style="width: {{ $ratingPer }}%">
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
@@ -39,7 +43,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="theme-font text-muted">(0 Review)</span>
+                            <span class="theme-font text-muted">({{ $book->reviews_count }} Reviews)</span>
                         </div>
 
                         <div class="content mt-3">
@@ -51,60 +55,64 @@
                         </div>
 
                         <div class="row mt-4">
-                            <div class="col-md-12">
-                                <h2 class="h3 mb-4">Readers also enjoyed</h2>
-                            </div>
+    <div class="col-md-12">
+        <h2 class="h3 mb-4">Readers also enjoyed</h2>
+    </div>
 
-                            @if ($relatedBooks->isNotEmpty())
-                                @foreach ($relatedBooks as $relatedBook)
-                                    <div class="col-md-4 col-lg-4 mb-4">
-                                        <div class="card border-0 shadow-lg">
+    @if ($relatedBooks->isNotEmpty())
+        @foreach ($relatedBooks as $relatedBook)
+            <div class="col-md-4 col-lg-4 mb-4">
+                <div class="card border-0 shadow-lg">
 
-                                            <a href="{{ route('book.detail', $relatedBook->id) }}">
-                                                @if ($relatedBook->image != '')
-                                                    <img src="{{ asset('uploads/books/thumb/' . $relatedBook->image) }}"
-                                                        alt="" class="card-img-top">
-                                                @else
-                                                    <img src="https://placehold.co/990x1400?text=No Image" alt=""
-                                                        class="card-img-top">
-                                                @endif
-                                            </a>
-                                            <div class="card-body">
-                                                <h3 class="h4 heading">
-                                                    <a href="{{ route('book.detail', $relatedBook->id) }}">
-                                                        {{ $relatedBook->title }}
-                                                    </a>
-                                                </h3>
-                                                <p>{{ $relatedBook->author }}</p>
-                                                <div class="star-rating d-inline-flex ml-2" title="">
-                                                    <span class="rating-text theme-font theme-yellow">0.0</span>
-                                                    <div class="star-rating d-inline-flex mx-2" title="">
-                                                        <div class="back-stars ">
-                                                            <i class="fa fa-star " aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                    <a href="{{ route('book.detail', $relatedBook->id) }}">
+                        @if ($relatedBook->image != '')
+                            <img src="{{ asset('uploads/books/thumb/' . $relatedBook->image) }}"
+                                alt="" class="card-img-top">
+                        @else
+                            <img src="https://placehold.co/990x1400?text=No Image" alt=""
+                                class="card-img-top">
+                        @endif
+                    </a>
+                    <div class="card-body">
+                        <h3 class="h4 heading">
+                            <a href="{{ route('book.detail', $relatedBook->id) }}">
+                                {{ $relatedBook->title }}
+                            </a>
+                        </h3>
+                        <p>{{ $relatedBook->author }}</p>
+                        <div class="star-rating d-inline-flex ml-2" title="">
+                            <span class="rating-text theme-font theme-yellow">{{ number_format($relatedBook->reviews_avg_rating, 1) }}</span>
+                            <div class="star-rating d-inline-flex mx-2" title="">
+                                <div class="back-stars ">
+                                    <i class="fa fa-star " aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                            <div class="front-stars" style="width: 70%">
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <span class="theme-font text-muted">(0)</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="front-stars" style="width: {{ $ratingPer }}%">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
-                                @endforeach
-                            @endif
-
-
+                                </div>
+                            </div>
+                            <br>
+                            <span class="theme-font text-muted">({{ $relatedBook->reviews_count }} Reviews)</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @else
+        <div class="col-md-12">
+            <p>No related books found.</p>
+        </div>
+    @endif
+</div>
+
                         <div class="col-md-12 pt-2">
                             <hr>
                         </div>
@@ -127,49 +135,50 @@
 
                                 @if ($book->reviews->isNotEmpty())
                                     @foreach ($book->reviews as $review)
-                                    <div class="card border-0 shadow-lg my-4">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <h5 class="mb-3">{{ $review->user->name }}</h4>
-                                                    <span class="text-muted">
-                                                        {{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}
-                                                    </span>
-                                            </div>
-                                            @php
-                                                $ratingPer = ($review->rating/5)*100;
-                                            @endphp
-                                            <div class="mb-3">
-                                                <div class="star-rating d-inline-flex" title="">
-                                                    <div class="star-rating d-inline-flex " title="">
-                                                        <div class="back-stars ">
-                                                            <i class="fa fa-star " aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        <div class="card border-0 shadow-lg my-4">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h5 class="mb-3">{{ $review->user->name }}</h4>
+                                                        <span class="text-muted">
+                                                            {{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}
+                                                        </span>
+                                                </div>
+                                                @php
+                                                    $ratingPer = ($review->rating / 5) * 100;
+                                                @endphp
+                                                <div class="mb-3">
+                                                    <div class="star-rating d-inline-flex" title="">
+                                                        <div class="star-rating d-inline-flex " title="">
+                                                            <div class="back-stars ">
+                                                                <i class="fa fa-star " aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                            <div class="front-stars" style="width: {{ $ratingPer }}%">
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <div class="front-stars"
+                                                                    style="width: {{ $ratingPer }}%">
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                            </div>
-                                            <div class="content">
-                                                <p>{{ $review->review }}</p>
+                                                </div>
+                                                <div class="content">
+                                                    <p>{{ $review->review }}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
                                 @else
-                                <div>
-                                    Reviews not found.
-                                </div>
+                                    <div>
+                                        Reviews not found.
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -185,7 +194,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Review for <strong>Atomic Habits</strong>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Review for
+                        <strong>{{ $book->title }}</strong>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

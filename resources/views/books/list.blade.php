@@ -36,12 +36,13 @@
                                     <th width="150">Action</th>
                                 </tr>
                             <tbody>
+
                                 @if ($books->isNotEmpty())
                                     @foreach ($books as $book)
                                         <tr>
                                             <td>{{ $book->title }}</td>
                                             <td>{{ $book->author }}</td>
-                                            <td>3.0 (3 Reviews)</td>
+                                            <td>{{ number_format($book->reviews_avg_rating, 1) }} ({{ $book->reviews_count }} Reviews)</td>
                                             <td>
                                                 @if ($book->status == 1)
                                                     <span class="text-success">Active</span>
@@ -50,8 +51,6 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="#" class="btn btn-success btn-sm"><i
-                                                        class="fa-regular fa-star"></i></a>
                                                 <a href="{{ route('books.edit', $book->id) }}"
                                                     class="btn btn-primary btn-sm"><i
                                                         class="fa-regular fa-pen-to-square"></i>

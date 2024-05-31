@@ -19,7 +19,11 @@ class BookController extends Controller
             $books->where('title', 'like', '%' . $request->keyword . '%');
         }
 
-        $books = $books->paginate(3);
+        $books = $books->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->where('status', 1)
+            ->paginate(3);
+
         return view('books.list', [
             'books' => $books
         ]);

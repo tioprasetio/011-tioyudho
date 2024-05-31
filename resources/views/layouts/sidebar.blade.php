@@ -10,7 +10,7 @@
                         </div>
                         <div class="h5 text-center">
                             <strong>{{ Auth::user()->name}}</strong>
-                            <p class="h6 mt-2 text-muted">5 Reviews</p>
+                            <p class="h6 mt-2 text-muted">{{ Auth::user()->role }}</p>
                         </div>
                     </div>
                 </div>
@@ -33,14 +33,25 @@
                                 <a href="{{ route('account.profile') }}">Profile</a>                               
                             </li>
                             <li class="nav-item">
-                                <a href="my-reviews.html">My Reviews</a>
+                                <a href="{{ route('account.myReviews') }}">My Reviews</a>
                             </li>
                             <li class="nav-item">
-                                <a href="change-password.html">Change Password</a>
-                            </li> 
-                            <li class="nav-item">
-                                <a href="{{ route('account.logout') }}">Logout</a>
+                                <a onclick="logoutUser()">Logout</a>
                             </li>                           
                         </ul>
                     </div>
                 </div>
+
+@section('script')
+    <script>
+        function logoutUser() {
+            if (confirm("Are you sure you want to logout?")) {
+                $.ajax({
+                    success: function(response){
+                        window.location.href = '{{ route("account.logout") }}';
+                    }
+                });
+            }
+        }
+    </script>
+@endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,6 @@ class AccountController extends Controller
     //Will update user profile
     public function updateProfile(Request $request)
     {
-
         $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email,' . Auth::user()->id . ',id',
@@ -88,6 +88,11 @@ class AccountController extends Controller
 
         if (!empty($request->image)) {
             $rules['image'] = 'image';
+        }
+
+        if (!empty($request->password)) {
+            $rules['current_password'] = 'required';
+            $rules['password'] = 'required|min:6|confirmed';
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -101,9 +106,17 @@ class AccountController extends Controller
         $user->email = $request->email;
         $user->save();
 
-        // Upload image
+        if (!empty($request->password)) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return redirect()->route('account.profile')->withInput()->withErrors(['current_password' => 'Current password is incorrect']);
+            }
+
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
         if (!empty($request->image)) {
-            // Delete old image
+
             File::delete(public_path('uploads/profile/' . $user->image));
             File::delete(public_path('uploads/profile/thumb/' . $user->image));
 
@@ -125,9 +138,26 @@ class AccountController extends Controller
         return redirect()->route('account.profile')->with('success', 'Profile updated successfully.');
     }
 
+
     public function logout()
     {
         Auth::logout();
         return redirect()->route('account.login');
+    }
+
+    public function myReviews(Request $request){
+        
+        $reviews = Review::with('book')->where('user_id', Auth::user()->id);
+        $reviews = $reviews->orderBy('created_at', 'DESC');
+
+        if (!empty($request->keyword)) {
+            $reviews = $reviews->where('review', 'like', '%'. $request->keyword .'%');
+        }
+
+        $reviews = $reviews->paginate(10);
+
+        return view('account.my-reviews', [
+            'reviews' => $reviews
+        ]);
     }
 }
