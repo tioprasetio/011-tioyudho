@@ -2,7 +2,16 @@ Tio Yudho Prasetio<br>
 Grup 5 - 011
 
 Book Review<br>
-Website untuk review buku.
+Website untuk review buku.<br>
+
+login app<br>
+
+admin:<br>
+- tioyudhoprasetio33@gmail.com (tio123)<br>
+
+user:<br>
+- ciro@gmail.com (ciro123)<br>
+- david@gmail.com (david123)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
