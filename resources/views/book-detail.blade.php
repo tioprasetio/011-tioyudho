@@ -55,63 +55,65 @@
                         </div>
 
                         <div class="row mt-4">
-    <div class="col-md-12">
-        <h2 class="h3 mb-4">Readers also enjoyed</h2>
-    </div>
-
-    @if ($relatedBooks->isNotEmpty())
-        @foreach ($relatedBooks as $relatedBook)
-            <div class="col-md-4 col-lg-4 mb-4">
-                <div class="card border-0 shadow-lg">
-
-                    <a href="{{ route('book.detail', $relatedBook->id) }}">
-                        @if ($relatedBook->image != '')
-                            <img src="{{ asset('uploads/books/thumb/' . $relatedBook->image) }}"
-                                alt="" class="card-img-top">
-                        @else
-                            <img src="https://placehold.co/990x1400?text=No Image" alt=""
-                                class="card-img-top">
-                        @endif
-                    </a>
-                    <div class="card-body">
-                        <h3 class="h4 heading">
-                            <a href="{{ route('book.detail', $relatedBook->id) }}">
-                                {{ $relatedBook->title }}
-                            </a>
-                        </h3>
-                        <p>{{ $relatedBook->author }}</p>
-                        <div class="star-rating d-inline-flex ml-2" title="">
-                            <span class="rating-text theme-font theme-yellow">{{ number_format($relatedBook->reviews_avg_rating, 1) }}</span>
-                            <div class="star-rating d-inline-flex mx-2" title="">
-                                <div class="back-stars ">
-                                    <i class="fa fa-star " aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-
-                                    <div class="front-stars" style="width: {{ $ratingPer }}%">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </div>
-                                </div>
+                            <div class="col-md-12">
+                                <h2 class="h3 mb-4">Readers also enjoyed</h2>
                             </div>
-                            <br>
-                            <span class="theme-font text-muted">({{ $relatedBook->reviews_count }} Reviews)</span>
+
+                            @if ($relatedBooks->isNotEmpty())
+                                @foreach ($relatedBooks as $relatedBook)
+                                    <div class="col-md-4 col-lg-4 mb-4">
+                                        <div class="card border-0 shadow-lg">
+
+                                            <a href="{{ route('book.detail', $relatedBook->id) }}">
+                                                @if ($relatedBook->image != '')
+                                                    <img src="{{ asset('uploads/books/thumb/' . $relatedBook->image) }}"
+                                                        alt="" class="card-img-top">
+                                                @else
+                                                    <img src="https://placehold.co/990x1400?text=No Image" alt=""
+                                                        class="card-img-top">
+                                                @endif
+                                            </a>
+                                            <div class="card-body">
+                                                <h3 class="h4 heading">
+                                                    <a href="{{ route('book.detail', $relatedBook->id) }}">
+                                                        {{ $relatedBook->title }}
+                                                    </a>
+                                                </h3>
+                                                <p>{{ $relatedBook->author }}</p>
+                                                <div class="star-rating d-inline-flex ml-2" title="">
+                                                    <span
+                                                        class="rating-text theme-font theme-yellow">{{ number_format($relatedBook->reviews_avg_rating, 1) }}</span>
+                                                    <div class="star-rating d-inline-flex mx-2" title="">
+                                                        <div class="back-stars ">
+                                                            <i class="fa fa-star " aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+
+                                                            <div class="front-stars" style="width: {{ $ratingPer }}%">
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <span class="theme-font text-muted">({{ $relatedBook->reviews_count }}
+                                                        Reviews)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="col-md-12">
+                                    <p>No related books found.</p>
+                                </div>
+                            @endif
                         </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    @else
-        <div class="col-md-12">
-            <p>No related books found.</p>
-        </div>
-    @endif
-</div>
 
                         <div class="col-md-12 pt-2">
                             <hr>

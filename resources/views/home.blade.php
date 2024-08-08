@@ -9,7 +9,6 @@
                     <div class="mt-2 mb-2">
                         <button class="btn btn-primary">
                             <a href="{{ route('home') }}" class="text-white text-decoration-none">Clear</a>
-
                         </button>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('main')
-<div class="container">
+    <div class="container">
         <div class="row my-5">
             <div class="col-md-3">
-                @include('layouts.sidebar')               
+                @include('layouts.sidebar')
             </div>
             <div class="col-md-9">
                 @include('layouts.message')
@@ -22,7 +22,7 @@
                                     <a href="{{ route('account.reviews') }}" class="btn btn-secondary ms-2">Clear</a>
                                 </div>
                             </form>
-                        </div>     
+                        </div>
                         <table class="table  table-striped mt-3">
                             <thead class="table-dark">
                                 <tr>
@@ -33,11 +33,11 @@
                                     <th>Status</th>
                                     <th width="100">Action</th>
                                 </tr>
-                                <tbody>
-                                    @if ($reviews->isNotEmpty())
+                            <tbody>
+                                @if ($reviews->isNotEmpty())
                                     @foreach ($reviews as $review)
                                         <tr>
-                                            <td>{{ $review->review }} <br/><strong>{{ $review->user->name }}</strong></td>                                        
+                                            <td>{{ $review->review }} <br /><strong>{{ $review->user->name }}</strong></td>
                                             <td>{{ $review->book->title }}</td>
                                             <td>{{ $review->rating }}</td>
                                             <td>
@@ -51,24 +51,28 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('account.reviews.edit', $review->id) }}" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
+                                                <a href="{{ route('account.reviews.edit', $review->id) }}"
+                                                    class="btn btn-primary btn-sm"><i
+                                                        class="fa-regular fa-pen-to-square"></i>
                                                 </a>
-                                                <a href="#" onclick="deleteReview({{ $review->id }})" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="#" onclick="deleteReview({{ $review->id }});"
+                                                    class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @endif                                 
-                                </tbody>
+                                @endif
+                            </tbody>
                             </thead>
-                        </table>   
-                        {{ $reviews->links() }}                
+                        </table>
+                        {{ $reviews->links() }}
                     </div>
-                    
-                </div>                
+
+                </div>
             </div>
-        </div>       
+        </div>
     </div>
 @endsection
+
 
 @section('script')
     <script>
@@ -76,12 +80,14 @@
             if (confirm("Are you sure you want to delete?")) {
                 $.ajax({
                     url: '{{ route("account.reviews.deleteReview") }}',
-                    data: {id:id},
+                    data: {
+                        id: id
+                    },
                     type: 'post',
                     headers: {
                         'X-CSRF-TOKEN' : '{{ csrf_token() }}'
                     },
-                    success: function(response){
+                    success: function(response) {
                         window.location.href = '{{ route("account.reviews") }}';
                     }
                 });

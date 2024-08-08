@@ -21,7 +21,7 @@ class BookController extends Controller
 
         $books = $books->withCount('reviews')
             ->withAvg('reviews', 'rating')
-            ->where('status', 1)
+            // ->where('status', 1)
             ->paginate(3);
 
         return view('books.list', [

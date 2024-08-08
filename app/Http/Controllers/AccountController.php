@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+// use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class AccountController extends Controller
 {
@@ -145,19 +145,78 @@ class AccountController extends Controller
         return redirect()->route('account.login');
     }
 
-    public function myReviews(Request $request){
-        
+    public function myReviews(Request $request)
+    {
+
         $reviews = Review::with('book')->where('user_id', Auth::user()->id);
         $reviews = $reviews->orderBy('created_at', 'DESC');
 
         if (!empty($request->keyword)) {
-            $reviews = $reviews->where('review', 'like', '%'. $request->keyword .'%');
+            $reviews = $reviews->where('review', 'like', '%' . $request->keyword . '%');
         }
 
         $reviews = $reviews->paginate(10);
 
         return view('account.my-reviews', [
             'reviews' => $reviews
+        ]);
+    }
+
+    // Edit review page
+    public function editReview($id)
+    {
+        $review = Review::where([
+            'id' => $id,
+            'user_id' => Auth::user()->id
+        ])->with('book')->first();
+
+        return view('account.my-reviews.edit-review', [
+            'review' => $review
+        ]);
+    }
+
+    // will update a review
+    public function updateReview($id, Request $request)
+    {
+        $user = Auth::user();
+
+        $review = Review::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'review' => 'required',
+            'rating' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('account.myReviews.editReview', $id)->withInput()->withErrors($validator);
+        }
+
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+        $review->save();
+
+        session()->flash('success', 'Review updated successfully.');
+
+        return redirect()->route('account.myReviews');
+    }
+
+    public function deleteReview(Request $request)
+    {
+        $id = $request->id;
+
+        $review = Review::find($id);
+
+        if ($review == null) {
+            return response()->json([
+                'status' => false
+            ]);
+        }
+        $review->delete();
+
+        session()->flash('success', 'Review deleted successfully');
+        return response()->json([
+            'status' => true,
+            'message' => 'Review deleted successfully'
         ]);
     }
 }
